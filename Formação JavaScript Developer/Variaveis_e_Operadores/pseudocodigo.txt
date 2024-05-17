@@ -1,0 +1,36 @@
+INICIO
+
+    // Função para substituir vírgula por ponto e converter para número
+    FUNÇÃO parseInput(entrada)
+        substituir vírgula por ponto na entrada
+        converter entrada para número
+        SE número NÃO for válido
+            lançar erro "Entrada inválida. Por favor, insira um número válido."
+        FIM SE
+        retornar número
+    FIM FUNÇÃO
+
+    // Função para calcular o valor da viagem
+    FUNÇÃO calcularValorViagem(distancia, consumoPorKM, precoCombustivel)
+        valorGasto = distancia / consumoPorKM * precoCombustivel
+        retornar valorGasto
+    FIM FUNÇÃO
+
+    TENTAR
+        // Solicitar as variáveis ao usuário
+        precoCombustivel = parseInput(prompt("Digite o preço do combustível (por litro): "))
+        consumoPorKM = parseInput(prompt("Digite o consumo médio de combustível do carro (litros por km): "))
+        distancia = parseInput(prompt("Digite a distância da viagem (em km): "))
+
+        // Calcular o valor da viagem
+        valorViagem = calcularValorViagem(distancia, consumoPorKM, precoCombustivel)
+
+        // Imprimir o resultado no console
+        imprimir("O valor gasto para realizar a viagem será de R$ " + valorViagem.toFixed(2))
+
+    CAPTURAR erro
+        // Tratar erros de entrada
+        imprimir(erro.mensagem)
+    FIM TENTAR
+
+FIM

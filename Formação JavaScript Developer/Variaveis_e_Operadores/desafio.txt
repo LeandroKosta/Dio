@@ -1,0 +1,11 @@
+
+Faça um programa em javascript para calcular o valor de uma viagem.
+
+Você precisa vai precisar pedir essas 3 variáveis. Sendo elas:
+    1 - Preço do Combustivel
+    2 - Gasto médio de combustível do carro por KM;
+    3 - Distância em KM da viagem;
+
+Precisa tratar a vírgula como ponto decimal em uma entrada de usuário e tratar o erro caso o usuario coloque informação errada.
+
+Imprima no console o valor que será gasto para realizar está viagem.    
