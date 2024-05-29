@@ -1,0 +1,38 @@
+INÍCIO
+
+    // Função para substituir vírgula por ponto e converter para número
+    FUNÇÃO parseInput(entrada)
+        substituir vírgula por ponto na entrada
+        converter entrada para número
+        retornar número
+    FIM FUNÇÃO
+
+    // Solicitar o peso e a altura do usuário
+    peso = pedirEntrada("Digite seu peso em kg: ")
+    altura = pedirEntrada("Digite sua altura em metros: ")
+
+    // Converter o peso e a altura para número
+    peso = parseInput(peso)
+    altura = parseInput(altura)
+
+    // Calcular o IMC
+    imc = peso / (altura * altura)
+
+    // Determinar a condição com base no IMC
+    SE imc < 18.5 ENTÃO
+        condicao = "Abaixo do peso"
+    SENÃO SE imc >= 18.5 E imc < 25 ENTÃO
+        condicao = "Peso Normal"
+    SENÃO SE imc >= 25 E imc < 30 ENTÃO
+        condicao = "Acima do peso"
+    SENÃO SE imc >= 30 E imc < 40 ENTÃO
+        condicao = "Obeso"
+    SENÃO
+        condicao = "Obesidade Grave"
+    FIM SE
+
+    // Imprimir o resultado
+    imprimir("Seu IMC é: " + imc.formatarParaDuasCasasDecimais())
+    imprimir("Condição: " + condicao)
+
+FIM

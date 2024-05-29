@@ -1,0 +1,36 @@
+INÍCIO
+
+    // Função para substituir vírgula por ponto e converter para número
+    FUNÇÃO parseInput(entrada)
+        substituir vírgula por ponto na entrada
+        converter entrada para número
+        retornar número
+    FIM FUNÇÃO
+
+    // Solicitar as três notas do aluno
+    nota1 = pedirEntrada("Digite a primeira nota: ")
+    nota2 = pedirEntrada("Digite a segunda nota: ")
+    nota3 = pedirEntrada("Digite a terceira nota: ")
+
+    // Converter as notas para números
+    nota1 = parseInput(nota1)
+    nota2 = parseInput(nota2)
+    nota3 = parseInput(nota3)
+
+    // Calcular a média
+    media = (nota1 + nota2 + nota3) / 3
+
+    // Determinar a classificação
+    SE media < 5 ENTÃO
+        classificacao = "reprovação"
+    SENÃO SE media >= 5 E media <= 7 ENTÃO
+        classificacao = "recuperação"
+    SENÃO
+        classificacao = "passou de semestre"
+    FIM SE
+
+    // Imprimir a média e a classificação
+    imprimir("A média do aluno é " + media.formatarParaDuasCasasDecimais())
+    imprimir("Classificação: " + classificacao)
+
+FIM
