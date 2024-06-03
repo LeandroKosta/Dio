@@ -1,0 +1,43 @@
+INÍCIO
+
+FUNÇÃO converterParaNumero(valor)
+    RETORNAR parseFloat(substituirVírgulaPorPonto(valor))
+FIM FUNÇÃO
+
+FUNÇÃO calcularValor(precoProduto, codigoPagamento)
+    DECLARAR valorPago
+    
+    ESCOLHA codigoPagamento
+        CASO '1':
+            valorPago = precoProduto * 0.9
+            SAIR
+        CASO '2':
+            valorPago = precoProduto * 0.85
+            SAIR
+        CASO '3':
+            valorPago = precoProduto
+            SAIR
+        CASO '4':
+            valorPago = precoProduto * 1.1
+            SAIR
+        CASO PADRÃO:
+            IMPRIMIR "Código de pagamento inválido."
+            RETORNAR
+    FIM ESCOLHA
+    
+    IMPRIMIR "O valor a ser pago pelo produto é: R$ " + formatarParaDuasCasasDecimais(valorPago)
+FIM FUNÇÃO
+
+precoProdutoStr = solicitarEntrada("Digite o preço do produto: ")
+precoProduto = converterParaNumero(precoProdutoStr)
+
+IMPRIMIR "Escolha a condição de pagamento:"
+IMPRIMIR "1 - À vista Débito (10% de desconto)"
+IMPRIMIR "2 - À vista Dinheiro/Pix (15% de desconto)"
+IMPRIMIR "3 - Em duas vezes (sem juros)"
+IMPRIMIR "4 - Acima de duas vezes (10% de juros)"
+codigoPagamento = solicitarEntrada("Digite o código da condição de pagamento: ")
+
+calcularValor(precoProduto, codigoPagamento)
+
+FIM
