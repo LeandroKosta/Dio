@@ -1,0 +1,22 @@
+@font-face{
+    /* Definindo uma nova fonte chamada 'RobotoMono' */
+    font-family: 'RobotoMono';
+    src:url('./fonts/RobotoMono-Thin.ttf'); /* Caminho para o arquivo da fonte */
+};
+    /* Aplicando a fonte 'RobotoMono' para todos os elementos */
+*{
+    font-family: 'RobotoMono', monospace; /* 'monospace' é a fonte de fallback */
+}
+
+body{
+    /* Estilização do corpo da página */
+    display: flex; /* Utiliza o modelo de layout flexbox */
+    font-family: 'RobotoMono', monospace; /* Define a fonte específica novamente para garantir consistência */
+    height: 100vh; /* Define a altura do body para 100% da altura da viewport */
+    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    align-items: center; /* Centraliza o conteúdo verticalmente */
+    text-align: center; /* Centraliza o texto */
+
+    color:#fff; /* Define a cor do texto como branco */
+    background: linear-gradient(to right, rgb(2, 161, 253), rgb(19, 20, 27)); /* Define um fundo com gradiente linear de azul para preto */
+}

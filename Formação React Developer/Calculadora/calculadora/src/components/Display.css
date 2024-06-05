@@ -1,0 +1,11 @@
+.display{
+    /* A classe .display é usada para estilizar o display de uma calculadora */
+    grid-column: span 4; /* Faz o elemento ocupar quatro colunas no grid */
+    background-color: #0004; /* Define a cor de fundo com uma opacidade leve (rgba(0, 0, 0, 0.25)) */
+    display: flex; /* Utiliza o layout flexbox para alinhar os itens internos */
+    justify-content: flex-end; /* Alinha o conteúdo flexível no final do container, à direita */
+    align-items: center; /* Alinha o conteúdo flexível ao centro verticalmente */
+    padding: 20px; /* Adiciona um espaçamento interno de 20 pixels em todos os lados */
+    font-size: 2.1em; /* Define o tamanho da fonte como 2.1 vezes o tamanho da fonte padrão */
+    overflow: hidden; /* Garante que qualquer conteúdo que exceda o tamanho do elemento seja ocultado */
+}

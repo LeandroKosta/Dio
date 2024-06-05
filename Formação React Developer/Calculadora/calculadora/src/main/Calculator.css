@@ -1,0 +1,17 @@
+.calculator{
+    /* Define a altura e largura da calculadora */
+    height:320px;
+    width: 235px;
+    /* Define bordas arredondadas e oculta qualquer conteúdo que transborde */
+    border-radius: 5px;
+    overflow: hidden;
+    /* Configura o layout da calculadora usando o modelo de grid */
+    display: grid;
+    /* Define 4 colunas de largura igual (25% cada) */
+    grid-template-columns: repeat(4,25%);
+    /* Define as linhas do grid: 
+       - A primeira linha ocupa o espaço restante disponível (1fr)
+       - As próximas cinco linhas têm altura fixa de 48px cada
+    */
+    grid-template-rows: 1fr 48px 48px 48px 48px 48px;
+}

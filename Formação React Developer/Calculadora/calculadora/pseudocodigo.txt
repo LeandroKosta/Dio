@@ -1,0 +1,98 @@
+IMPORTAR React, Component, Button, Display, Calculator.css
+
+CONSTANTE initialState
+    displayValue <- "0"
+    clearDisplay <- false
+    operation <- null
+    values <- [0, 0]
+    current <- 0
+
+FUNÇÃO calculate(num1, num2, operation)
+    SE operation = "+"
+        RETORNAR num1 + num2
+    SENÃO SE operation = "-"
+        RETORNAR num1 - num2
+    SENÃO SE operation = "*"
+        RETORNAR num1 * num2
+    SENÃO SE operation = "/"
+        RETORNAR num1 / num2
+    SENÃO
+        RETORNAR NaN
+
+CLASSE Calculator HERDA Component
+    estado <- initialState
+
+    CONSTRUTOR()
+        SUPER()
+        BIND clearMemory
+        BIND setOperation
+        BIND addDigit
+
+    MÉTODO clearMemory()
+        DEFINIR estado inicial
+
+    MÉTODO setOperation(operation)
+        SE current = 0
+            DEFINIR operation, current: 1, clearDisplay: true
+        SENÃO
+            equals <- operation = "="
+            currentOperation <- operation atual
+
+            values <- COPIAR estado.values
+            TENTAR
+                result <- calculate(values[0], values[1], currentOperation)
+                values[0] <- result
+            CAPTURAR
+                values[0] <- estado.values[0]
+
+            values[1] <- 0
+
+            DEFINIR estado {
+                displayValue: values[0]
+                operation: SE equals ENTAO null SENAO operation
+                current: SE equals ENTAO 0 SENÃO 1
+                clearDisplay: NÃO equals
+                values
+            }
+
+    MÉTODO addDigit(n)
+        SE n = "." E displayValue CONTÉM "."
+            RETORNAR
+
+        clearDisplay <- displayValue = "0" OU clearDisplay
+        currentValue <- SE clearDisplay ENTAO "" SENÃO displayValue
+        displayValue <- currentValue + n
+        DEFINIR estado displayValue, clearDisplay: false
+
+        SE n != "."
+            i <- current
+            newValue <- parseFloat(displayValue)
+            values <- COPIAR estado.values
+            values[i] <- newValue
+            DEFINIR estado values
+
+    MÉTODO render()
+        RETORNAR (
+            <div class="calculator">
+                <Display value=estado.displayValue />
+                <Button label="AC" click=clearMemory triple=true />
+                <Button label="/" click=setOperation operation=true />
+                <Button label="7" click=addDigit />
+                <Button label="8" click=addDigit />
+                <Button label="9" click=addDigit />
+                <Button label="*" click=setOperation operation=true />
+                <Button label="4" click=addDigit />
+                <Button label="5" click=addDigit />
+                <Button label="6" click=addDigit />
+                <Button label="-" click=setOperation operation=true />
+                <Button label="1" click=addDigit />
+                <Button label="2" click=addDigit />
+                <Button label="3" click=addDigit />
+                <Button label="+" click=setOperation operation=true />
+                <Button label="0" click=addDigit double=true />
+                <Button label="." click=addDigit />
+                <Button label="=" click=setOperation operation=true />
+            </div>
+        )
+
+EXPORTAR Calculator

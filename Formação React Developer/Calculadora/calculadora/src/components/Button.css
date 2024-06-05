@@ -1,0 +1,39 @@
+:root{
+    /* Definindo variáveis CSS para reutilização de valores */
+    --bg-button: #f0f0f0; /* Cor de fundo do botão */
+    --border-button: solid 1px #888; /* Estilo de borda do botão */
+}
+
+.button{
+    /* Estilização básica para todos os botões com a classe .button */
+    font-size: 1.4em; /* Define o tamanho da fonte */
+    background-color: var(--bg-button); /* Usa a variável para a cor de fundo */
+    border: none; /* Remove borda padrão */
+    border-right: var(--bg-button); /* Define a borda direita com a cor de fundo */
+    border-bottom: var(--bg-button); /* Define a borda inferior com a cor de fundo */
+    outline: none; /* Remove contorno ao focar no botão */
+    &:hover {
+        opacity: 0.6; /* Altera a opacidade ao passar o mouse sobre o botão */
+    }
+}
+
+.button.double{
+    /* Estilização para botões que ocupam duas colunas */
+    grid-column: span 2; /* Faz o botão ocupar duas colunas no grid */
+}
+
+.button.triple{
+    /* Estilização para botões que ocupam três colunas */
+    grid-column: span 3; /* Faz o botão ocupar três colunas no grid */
+}
+
+.button.operation{
+    /* Estilização para botões de operação */
+    background-color: #fa8231; /* Define uma cor de fundo laranja */
+    color: #fff; /* Define a cor do texto como branco */
+}
+
+.button.operation:active{
+    /* Estilização para botões de operação quando clicados */
+    background-color: #fa8231cc; /* Altera a cor de fundo ao ser pressionado */
+}
