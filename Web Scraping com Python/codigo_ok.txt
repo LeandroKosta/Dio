@@ -1,0 +1,55 @@
+import re  # Importa o módulo de expressões regulares para manipulação de strings
+from seleniumbase import Driver  # Importa a classe Driver do seleniumbase para controle do navegador
+import pandas as pd  # Importa a biblioteca pandas para manipulação de dados
+from selenium.webdriver.common.by import By  # Importa By para localizar elementos HTML
+from selenium.webdriver.support import expected_conditions as EC  # Importa condições esperadas para controle de fluxo
+from selenium.webdriver.support.ui import WebDriverWait  # Importa WebDriverWait para espera explícita
+from a_selenium2df import get_df  # Importa função personalizada para converter dados do Selenium para DataFrame
+from PrettyColorPrinter import add_printer  # Importa função para adicionar impressora colorida
+
+# Adiciona impressora colorida para o console
+add_printer(1)
+
+# Função para obter DataFrame a partir do Selenium
+def obter_dataframe(driver, query="*"):
+    df = pd.DataFrame()
+    # Tenta obter DataFrame enquanto estiver vazio
+    while df.empty:
+        df = get_df(
+            driver,  # Driver do Selenium
+            By,  # Módulo para localização de elementos
+            WebDriverWait,  # Módulo para espera explícita
+            EC,  # Módulo para condições esperadas
+            queryselector=query,  # Seletor de consulta
+            with_methods=True,  # Inclui métodos no DataFrame
+        )
+    return df
+
+# Inicializa o driver do Selenium com Undetected Chrome (uc)
+driver = Driver(uc=True)
+# Abre a página da Sportingbet
+driver.get("https://sports.sportingbet.com/pt-br/sports/futebol-4/amanh%C3%A3")
+
+# Loop infinito para extrair dados continuamente
+while True:
+    try:
+        # Obtém DataFrame com dados da página usando o seletor 'ms-event'
+        df = obter_dataframe(driver, query='ms-event')
+        
+        # Processa o DataFrame para extrair e limpar os dados
+        df = (df.dropna(subset=['aa_innerText'])  # Remove linhas com valores nulos na coluna 'aa_innerText'
+              .aa_innerText.apply(lambda x: pd.Series(
+                  [q for q in re.split(r'[\n\r]', x) if not re.match(r'^\d+$', q)]))  # Divide o texto em partes e remove números isolados
+              [[2, 0, 1, 4, 5, 6]]  # Seleciona colunas específicas
+              .rename(columns={0: 'team1_nome', 1: 'team2_nome', 2: 'data', 4: 'team1', 5: 'empate', 6: 'team2'})  # Renomeia colunas
+              .dropna()  # Remove linhas com valores nulos
+              .assign(
+                  team1=lambda q: q.team1.str.replace(',', '.'),  # Substitui vírgulas por pontos nos valores da coluna 'team1'
+                  team2=lambda q: q.team2.str.replace(',', '.'),  # Substitui vírgulas por pontos nos valores da coluna 'team2'
+                  empate=lambda q: q.empate.str.replace(',', '.')  # Substitui vírgulas por pontos nos valores da coluna 'empate'
+              )
+              .astype({'team1': 'Float64', 'empate': 'Float64', 'team2': 'Float64'}))  # Converte colunas para tipo float
+        print(df)  # Imprime o DataFrame
+    except Exception as e:
+        # Captura e imprime qualquer exceção que ocorrer
+        print(f"Erro: {e}")

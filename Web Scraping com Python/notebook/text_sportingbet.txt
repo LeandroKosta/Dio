@@ -1,0 +1,111 @@
+def get_sporting_bet_odds():
+    # Mapeamento dos clubes
+    clubs_map = {
+        'fluminense_fc_rj': 'fluminense',
+        'ceara_sc': 'ceara',
+        'botafogo_fr_rj': 'botafogo',
+        'cuiaba_esporte_clube_mt': 'cuiaba',
+        'atletico_mineiro_mg': 'atletico_mineiro',
+        'coritiba_fc_pr': 'coritiba',
+        'sao_paulo_fc_sp': 'sao_paulo',
+        'ca_paranaense_pr': 'athletico_pr',
+        'ec_juventude_rs': 'juventude',
+        'america_mg': 'america_mineiro',
+        'sc_internacional_rs': 'internacional',
+        'goias_ec_go': 'goias',
+        'ac_goianiense_go': 'atletico_goianiense',
+        'santos_fc_sp': 'santos',
+        'avai_fc_sc': 'avai',
+        'red_bull_bragantino': 'bragantino',
+        'cr_flamengo_rj': 'flamengo',
+        'sc_corinthians_sp': 'corinthians',
+        'fortaleza_ec_ce': 'fortaleza',
+        'se_palmeiras_sp': 'palmeiras'
+    }
+    
+    # Configurar opções do navegador
+    opts = FirefoxOptions()
+    opts.headless = True
+
+    # Iniciar o navegador
+    browser = webdriver.Firefox(options=opts)
+    browser.implicitly_wait(2)
+
+    try:
+        # Acessar o site
+        browser.get('https://sports.sportingbet.com/en/sports/football-4/betting/brazil-33/brasileiro-serie-a-102838')
+        
+        # XPath base para os elementos de jogos
+        base_xpath = '//*[@id="main-view"]/ms-widget-layout/ms-widget-slot/ms-composable-widget/ms-widget-slot[2]/ms-tabbed-grid-widget/ms-grid/div'
+
+        # Listas para armazenar os dados dos jogos
+        games_ids = []
+        mandantes = []
+        visitantes = []
+        odds_mandantes = []
+        odds_empates = []
+        odds_visitantes = []
+
+        # Loop para extrair os dados dos jogos
+        for day in range(1, 5):
+            for game in range(1, 10):
+                try:
+                    # Extrair o texto do jogo
+                    text_game = browser.find_element(
+                        By.XPATH,
+                        base_xpath + f'/ms-event-group[{day}]/ms-event[{game}]/div'
+                    ).text
+
+                    # Processar o texto do jogo de acordo com o número de linhas
+                    lines = text_game.split('\n')
+                    if len(lines) == 10:
+                        mandante, visitante, _, _, odd_mandante, odd_empate, odd_visitante, _, _, _ = lines
+                    elif len(lines) == 9:
+                        mandante, visitante, _, odd_mandante, odd_empate, odd_visitante, _, _, _ = lines
+                    elif len(lines) == 8:
+                        mandante, visitante, odd_mandante, odd_empate, odd_visitante, _, _, _ = lines
+                    else: 
+                        raise NoSuchElementException()
+
+                    # Normalizar os nomes dos clubes
+                    clubs = [unidecode(club.strip()).lower().replace(' ', '_') for club in [mandante.strip(), visitante.strip()]]
+                    clubs = [clubs_map[club] if club in clubs_map else club for club in clubs]
+                    game_id = '-'.join(sorted(clubs))
+                    
+                    mandante = clubs[0]
+                    visitante = clubs[1]
+
+                    # Adicionar os dados às listas
+                    games_ids.append(game_id)
+                    mandantes.append(mandante)
+                    visitantes.append(visitante)
+                    odds_mandantes.append(float(odd_mandante))
+                    odds_empates.append(float(odd_empate))
+                    odds_visitantes.append(float(odd_visitante))
+                
+                except NoSuchElementException:
+                    break
+
+        # Criar DataFrame com os dados extraídos
+        df = pd.DataFrame({
+            'game_id': games_ids,
+            'mandante': mandantes,
+            'visitante': visitantes,
+            'odd_mandante': odds_mandantes,
+            'odd_empate': odds_empates,
+            'odd_visitante': odds_visitantes
+        })
+    
+    except Exception as e:
+        print(f"Ocorreu um erro: {e}")
+        df = pd.DataFrame()  # Retornar DataFrame vazio em caso de erro
+    
+    finally:
+        # Fechar o navegador
+        browser.quit()
+    
+    return df
+
+    sporting_bet_df = get_sporting_bet_odds()
+
+    sporting_bet_df

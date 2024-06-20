@@ -1,0 +1,73 @@
+def get_betway_odds():
+    # Configuração das opções do navegador Firefox para rodar em modo headless (sem interface gráfica)
+    opts = FirefoxOptions()
+    opts.headless = True
+    browser = Firefox(options=opts)
+    
+    # Definir tempo de espera implícito de 2 segundos para carregar os elementos da página
+    browser.implicitly_wait(2)
+
+    # Acessar a página específica do site Betway para o Campeonato Brasileiro Série A
+    browser.get('https://betway.com/pt/sports/grp/soccer/brazil/brasileiro-serie-a')
+    
+    # Base XPath para localizar os elementos de interesse na página
+    base_xpath = '/html/body/div[1]/div/div[3]/div/div[1]/div/div[2]/div[4]/div/div[3]/div[2]/div'
+
+    # Listas para armazenar os dados extraídos
+    games_ids = []
+    mandantes = []
+    visitantes = []
+    odds_mandantes = []
+    odds_empates = []
+    odds_visitantes = []
+
+    # Loop para percorrer dias e jogos disponíveis na página
+    for day in range(1, 5):  # Verifica os primeiros 4 dias
+        for game in range(1, 10):  # Verifica os primeiros 9 jogos de cada dia
+            try:
+                # Tentar encontrar o elemento do jogo específico usando XPath dinâmico
+                text_game = browser.find_element(
+                    by='xpath',
+                    value=base_xpath + f'/div[{day}]/div[2]/div/div[{game}]'
+                ).text
+
+                # Separar o texto do jogo em partes específicas
+                _, game_name, odd_mandante, odd_empate, odd_visitante = text_game.split('\n')
+                
+                # Processar os nomes dos clubes
+                clubs = [unidecode(club.strip()).lower().replace(' ', '_') for club in game_name.split('-')]
+                game_id = '-'.join(sorted(clubs))  # Criar um ID único para o jogo
+                mandante = clubs[0]
+                visitante = clubs[1]
+
+                # Adicionar os dados extraídos às respectivas listas
+                games_ids.append(game_id)
+                mandantes.append(mandante)
+                visitantes.append(visitante)
+                odds_mandantes.append(float(odd_mandante.replace(',', '.')))
+                odds_empates.append(float(odd_empate.replace(',', '.')))
+                odds_visitantes.append(float(odd_visitante.replace(',', '.')))
+            except NoSuchElementException:
+                # Se o elemento do jogo não for encontrado, interrompe o loop interno
+                break
+    
+    # Criar um DataFrame pandas com os dados extraídos
+    df = pd.DataFrame({
+        'game_id': games_ids,
+        'mandante': mandantes,
+        'visitante': visitantes,
+        'odd_mandante': odds_mandantes,
+        'odd_empate': odds_empates,
+        'odd_visitante': odds_visitantes
+    })
+    
+    # Fechar o navegador
+    browser.quit()
+    
+    # Retornar o DataFrame contendo os dados dos jogos e suas odds
+    return df
+
+    # Chama a função get_betway_odds que acessa o site da Betway, extrai as odds e retorna um DataFrame pandas
+betway_odds_df = get_betway_odds()
+
+betway_odds_df
